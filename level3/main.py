@@ -54,7 +54,7 @@ def daysAvailable(start_date, end_date, birthday):
 
     for i in years:
         birthday = birthday.replace(year=i)
-        if start_date <= birthday <= end_date and birthday.weekday() != 5 and birthday.weekday() != 6:
+        if start_date <= birthday <= end_date and birthday.weekday() != 5 and birthday.weekday() != 6 and birthday.strftime("%m-%d") not in holidaysItaly and birthday not in easter_monday_dates:
             workdays_with_bd -= 1
             #holidays +=1 commented because we don't have to save the holidays for every developer in the output file
             #just need the "common" ones
