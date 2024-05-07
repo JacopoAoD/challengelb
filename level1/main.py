@@ -41,25 +41,26 @@ def daysAvailable(start_date, end_date):
 
     return totaldays, workdays, weekend, holidays                        
    
-for period in periods:   
-    availability = {}
+def main():
+    for period in periods:   
+        availability = {}
 
-    start_date = datetime.strptime(period['since'], "%Y-%m-%d").date()
-    end_date = datetime.strptime(period['until'], "%Y-%m-%d").date()
-    if end_date < start_date:
-        raise ValueError("End date of the period can't be prior to the start date of the period")
+        start_date = datetime.strptime(period['since'], "%Y-%m-%d").date()
+        end_date = datetime.strptime(period['until'], "%Y-%m-%d").date()
+        if end_date < start_date:
+            raise ValueError("End date of the period can't be prior to the start date of the period")
 
+        totaldays, workdays, weekend, holidays = daysAvailable(start_date, end_date)
 
-    totaldays, workdays, weekend, holidays = daysAvailable(start_date, end_date)
-
-    availability["total_days"] = totaldays.days +1 #+1 in order to considerate also the end date
-    availability["period_id"] = period["id"]  
-    availability["workdays"] = workdays
-    availability["weekend_days"] = weekend
-    availability["holidays"] = holidays
-    availabilities.append(availability)
+        availability["total_days"] = totaldays.days +1 #+1 in order to considerate also the end date
+        availability["period_id"] = period["id"]  
+        availability["workdays"] = workdays
+        availability["weekend_days"] = weekend
+        availability["holidays"] = holidays
+        availabilities.append(availability)
     
+    with open("output.json", "w") as json_file:
+        json.dump({"availabilities": availabilities}, json_file, indent=4)
 
-with open("output.json", "w") as json_file:
-    json.dump({"availabilities": availabilities}, json_file, indent=4)
-
+if (__name__ == "__main__"):
+    main()

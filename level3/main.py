@@ -30,9 +30,7 @@ def daysAvailable(start_date, end_date, birthday):
 
     years = [x for x in range (start_date.year, end_date.year + 1)]    
 
-    for single_date in (start_date + timedelta(i) for i in range(totaldays.days + 1)):
-
-        
+    for single_date in (start_date + timedelta(i) for i in range(totaldays.days + 1)):        
 
         #check weekends
         if(single_date.weekday() == 5 or single_date.weekday() == 6):
@@ -64,35 +62,39 @@ def daysAvailable(start_date, end_date, birthday):
     return totaldays, workdays, workdays_with_bd, weekend, holidays   
 
 
-
-for project in projects:
-    total_effort_days = 0
-    totaldays = 0
-    workdays = 0
-    weekend = 0
-    holidays = 0
-    start_date = datetime.strptime(project['since'], "%Y-%m-%d").date()
-    end_date = datetime.strptime(project['until'], "%Y-%m-%d").date()    
-    if end_date < start_date:
-        raise ValueError("End date of the period can't be prior to the start date of the period")  
-
-    for developer in developers:
+def main():
+    for project in projects:
         availability = {}
-        birthday = datetime.strptime(developer['birthday'], "%Y-%m-%d").date()
-        totaldays, workdays, workdays_with_bd, weekend, holidays = daysAvailable(start_date, end_date, birthday)
-        #added workdays_with_bd --> in the output file i save the "general" workdays in the period,
-        #but to calculate the feasibility I need to calculate the actual workdays of every single developer
-        #Workdays_with_bd is needed just for calculations, not for output file
-        total_effort_days += workdays_with_bd
-    
-    availability["period_id"] = project["id"]  
-    availability["total_days"] = totaldays.days +1
-    availability["workdays"] = workdays
-    availability["weekend_days"] = weekend
-    availability["holidays"] = holidays    
-    availability["feasibility"] = total_effort_days >= project["effort_days"]  
-    availabilities.append(availability)  
+        total_effort_days = 0
+        totaldays = 0
+        workdays = 0
+        weekend = 0
+        holidays = 0
+        start_date = datetime.strptime(project['since'], "%Y-%m-%d").date()
+        end_date = datetime.strptime(project['until'], "%Y-%m-%d").date()    
+        if end_date < start_date:
+            raise ValueError("End date of the period can't be prior to the start date of the period")  
+
+        for developer in developers:
+            
+            birthday = datetime.strptime(developer['birthday'], "%Y-%m-%d").date()
+            totaldays, workdays, workdays_with_bd, weekend, holidays = daysAvailable(start_date, end_date, birthday)
+            #added workdays_with_bd --> in the output file i save the "general" workdays in the period,
+            #but to calculate the feasibility I need to calculate the actual workdays of every single developer
+            #Workdays_with_bd is needed just for calculations, not for output file
+            total_effort_days += workdays_with_bd
+
+        availability["period_id"] = project["id"]  
+        availability["total_days"] = totaldays.days +1
+        availability["workdays"] = workdays
+        availability["weekend_days"] = weekend
+        availability["holidays"] = holidays    
+        availability["feasibility"] = total_effort_days >= project["effort_days"]  
+        availabilities.append(availability)  
 
 
-with open("output.json", "w") as json_file:
-    json.dump({"availabilities": availabilities}, json_file, indent=4)
+    with open("output.json", "w") as json_file:
+        json.dump({"availabilities": availabilities}, json_file, indent=4)
+
+if __name__ == "__main__":
+    main()

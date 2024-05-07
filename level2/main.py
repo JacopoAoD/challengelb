@@ -56,25 +56,28 @@ def daysAvailable(start_date, end_date, birthday):
 
     return totaldays, workdays, weekend, holidays   
 
-for period in periods:
-    start_date = datetime.strptime(period['since'], "%Y-%m-%d").date()
-    end_date = datetime.strptime(period['until'], "%Y-%m-%d").date() 
-    if end_date < start_date:
-        raise ValueError("End date of the period can't be prior to the start date of the period")
-    for developer in developers:
-        availability = {}
-        birthday = datetime.strptime(developer['birthday'], "%Y-%m-%d").date()
-        totaldays, workdays, weekend, holidays = daysAvailable(start_date, end_date, birthday)
-        availability["developer_id"] = developer["id"]
-        availability["period_id"] = period["id"]  
-        availability["total_days"] = totaldays.days +1
-        availability["workdays"] = workdays
-        availability["weekend_days"] = weekend
-        availability["holidays"] = holidays
-        availabilities.append(availability)
+def main():
+    for period in periods:
+        start_date = datetime.strptime(period['since'], "%Y-%m-%d").date()
+        end_date = datetime.strptime(period['until'], "%Y-%m-%d").date() 
+        if end_date < start_date:
+            raise ValueError("End date of the period can't be prior to the start date of the period")
+        for developer in developers:
+            availability = {}
+            birthday = datetime.strptime(developer['birthday'], "%Y-%m-%d").date()
+            totaldays, workdays, weekend, holidays = daysAvailable(start_date, end_date, birthday)
+            availability["developer_id"] = developer["id"]
+            availability["period_id"] = period["id"]  
+            availability["total_days"] = totaldays.days +1
+            availability["workdays"] = workdays
+            availability["weekend_days"] = weekend
+            availability["holidays"] = holidays
+            availabilities.append(availability)
 
 
-with open("output.json", "w") as json_file:
-    json.dump({"availabilities": availabilities}, json_file, indent=4)
+    with open("output.json", "w") as json_file:
+        json.dump({"availabilities": availabilities}, json_file, indent=4)
+    #output datas are not exactly as the original output.json file 
 
-#output datas are not exactly as the original output.json file
+if __name__ == "__main__":
+    main()
