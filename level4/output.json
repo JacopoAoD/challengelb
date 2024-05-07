@@ -1,0 +1,34 @@
+{
+    "availabilities": [
+        {
+            "period_id": 1,
+            "total_days": 365,
+            "workdays": 249,
+            "weekend_days": 105,
+            "holidays": 11,
+            "feasibility": true,
+            "daily_work_for_dev": "02 hours: 43 minutes",
+            "doable_in": "85 days"
+        },
+        {
+            "period_id": 2,
+            "total_days": 76,
+            "workdays": 51,
+            "weekend_days": 22,
+            "holidays": 3,
+            "feasibility": true,
+            "daily_work_for_dev": "07 hours: 55 minutes",
+            "doable_in": "51 days"
+        },
+        {
+            "period_id": 3,
+            "total_days": 15,
+            "workdays": 11,
+            "weekend_days": 4,
+            "holidays": 0,
+            "feasibility": true,
+            "daily_work_for_dev": "02 hours: 28 minutes",
+            "doable_in": "4 days"
+        }
+    ]
+}
